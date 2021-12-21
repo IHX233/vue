@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<style>
+    span{
+        cursor: pointer;
+    }
+    #title{
+        font-size: 20px;
+        color:pink;
+    }
+    li{
+        margin-top:10px;
+    }
+</style>
+<body>
+    <div id="title">记事本</div>
+   <div id="box">
+       <input type="text" v-model="a" @keyup.enter="b">
+       <ul>
+           <li v-for = "(todo,index) in c">{{todo}}<span @click = "d(index)">取消</span></li>
+       </ul>
+    </div> 
+</body>
+<script>
+    new Vue({
+        el:"#box",
+        data:{
+            a:'',
+            c:[]
+        },
+        methods:{
+            b(){
+                this.c.push(this.a)
+                this.a = ''
+            },
+            d(index){
+                this.c.splice(index,1)
+            }
+        }
+    })
+</script>
+</html>

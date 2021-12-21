@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="box">
+        <keep-alive include="son1">
+            <component :is = "is"></component>
+        </keep-alive>
+        <button @click = "a">点击切换</button>
+    </div>
+    <template id="son1">
+        <div id=>我是小明</div>
+    </template>
+    <template id="son2">
+        <div>我是小红</div>
+    </template>
+    
+</body>
+<script>
+    let son1 = {
+        template:"#son1",
+        created(){
+            console.log("小明出生了")
+        },
+        destroyed(){
+            console.log("小明die了")
+        },
+        activated(){
+            console.log("小明醒了")
+        },
+        deactivated(){
+            console.log("小明睡着了")
+        }
+    }
+    let son2 = {
+        template:"#son2",
+        created(){
+            console.log("小红出生了")
+        },
+        destroyed(){
+            console.log("小红die了")
+        },
+        activated(){
+            console.log("小红醒了")
+        },
+        deactivated(){
+            console.log("小红睡着了")
+        }
+    }
+    new Vue({
+        el:"#box",
+        data:{
+            is:"son1"
+        },
+        methods:{
+            a(){
+                if(this.is==="son1"){
+                    this.is = "son2"
+                }else{
+                    this.is = "son1"
+                }
+            }
+        },
+        components:{
+            son1,
+            son2
+        }
+    })
+    /*
+    *动态组件在进行不同组件的切换时是直接销毁不显示的组件（触发destroyed），并创建显示的组件（触发created）
+    *
+    * 使用keep-alive组件可以让动态组件缓存
+    * include = 'son'  只有son可以被缓存
+    * exclude = 'son'  除了son都被缓存
+    * 
+    * 
+    * 
+    */
+</script>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="box">
+        <ihx :list="list"></ihx>
+    </div>
+    <template id="a">
+        <ul>
+            <li v-for="item in list">
+                {{item.title}}
+                <template v-if="item.child"><!--结束递归的条件-->
+                    <tree-list :list="item.child"></tree-list>
+                </template>
+            </li>
+        </ul>
+    </template>
+    
+</body>
+<script>
+    let ihx = {
+        template:"#a",
+        name:'tree-list',
+        props:["list"]
+    }
+    new Vue({
+        el:"#box",
+        components:{
+            ihx
+        },
+        data:{
+            list:[
+                {
+                    title:'湖南省',
+                    child:[
+                        {
+                            title:'长沙市',
+                            child:[
+                                {title:"芙蓉区"},
+                                {title:"岳区"}
+                        ]
+                        },
+                        {title:'衡州市'},
+                        {title:'株洲市'}     
+                    ]  
+                },
+                {
+                    title:'江西省',
+                    child:[
+                        {title:"吉安市"},
+                        {title:"南昌市"},
+                        {title:"赣州市"}
+                    ]
+                },
+                {
+                    title:"曹县",
+                    child:[
+                        {title:"一环"},
+                        {title:"二环"},
+                        {title:"三环"}
+                    ]
+                }
+            ]
+        }
+    })
+</script>
+</html>

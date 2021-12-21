@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0px;
+            padding:0px;
+        }
+        #box{
+            margin:30px 100px;
+            display: inline-block;
+            width:800px;
+            border: solid 1px #000;
+            text-align: center;
+             
+        }
+        #box .comment{
+            display:flex;
+            justify-content: space-between;
+        }
+        .left{
+            width:400px;
+            border-right:solid 1px #000;
+            border-top:solid 1px #000;
+        }
+        .right{
+            width:400px;
+            border-top:solid 1px #000;
+        }
+        .inp{
+            margin-top:20px;
+            margin-right:50px;
+        }
+        .ta{
+            margin-right:80px;
+            margin-top:30px;
+        }
+        .btn{
+            margin-top:30px;
+            width:50px;
+        }
+        ul{
+           list-style: none; 
+        }
+
+    </style>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="box">组件练习
+        <div class="comment">
+            <comment  @x="handleX"></comment>
+            <comment-list :comments="data"></comment-list>
+        </div>
+    </div>
+    <template id="comment">
+        <div class="left">
+            用户：<input type="text" class="inp" v-model.lazy="name"></input><br>
+            评论内容：<textarea class="ta" v-model.lazy="comment"></textarea><br>
+            <button class="btn" @click="a">提交</button>   
+        </div>
+    </template>
+    <template id="commentList">
+        <div class="right">
+            <span v-if="isShow">暂无评论，快来抢占沙发吧！</span>
+            <template v-else>
+                <span>评论列表</span>
+                <ul><!--v-命令应该在标签使用的地方插入-->
+                    <ll v-for="(item, index) in comments"  :comment="item" :index="index" :key="index"></ll><!--利用属性绑定获取循环获取的数据，ll组件再接收-->
+                </ul>
+            </template>
+            
+        </div>
+    </template>
+    <template id="ll">
+            <li>
+                
+                <p><span>{{comment.name}}</span>说：<span>{{comment.comment}}</span><button @click="r">删除评论</button></p>
+            </li>
+        
+        
+
+    </template>
+</body>
+<script>
+    let eventBus = new Vue()
+    let comment = {
+        template:'#comment',
+        data(){
+            return{
+                name:'',
+                comment:''
+            }
+        },
+        methods:{
+            a(){
+                this.$emit('x',{
+                    name:this.name,
+                    comment:this.comment
+                })
+                this.name = ""
+                this.comment = ""
+            }
+        }
+    }
+    let ll = {
+        template:'#ll',
+        props:["comment","index"],
+        methods:{
+            r(){
+                eventBus.$emit('y',this.index)
+            }
+        }
+
+
+    }
+    let CommentList = {
+        template:'#commentList',
+        props:{
+            comments:{
+                type:Array,
+            }
+        },
+        data(){
+            return{
+                number:this.comments
+            }
+        },
+        components:{
+            ll
+        },
+        computed:{
+            isShow(){
+                return !this.comments!== undefined && this.comments.length == 0
+            }
+        }
+    }
+    
+    new Vue({
+        el:"#box",
+        components:{
+            comment,
+            CommentList
+        },
+        data:{
+            data:[]
+        },
+        methods:{
+            handleX(d){
+                this.data.push(d)
+            }
+        },
+        created(){
+                eventBus.$on('y',(index) => {
+                   this.data.splice(index,1)
+                })
+            }
+    })
+</script>
+</html>

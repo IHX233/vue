@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="box">
+        <ihx>
+            <template #xxx = "lala">
+                <p>{{lala}}</p>
+                <p>{{lala.l}}</p>
+                <p>{{msg}}</p>
+                <p>{{a}}</p>
+            </template>
+            <!--以上是插入插槽的数据-->
+            
+        </ihx>
+    </div>
+    <template id="ihx">
+        <div>
+            <p>哈哈</p>
+            <p>嘿嘿</p>
+            <slot name="xxx" :l="b"></slot>
+        </div>
+        
+    </template>
+</body>
+<script>
+    let ihx = {
+        template:"#ihx",
+        data(){
+            return{
+                b:"我是子元素的数据"
+            }
+        }
+    }
+    new Vue({
+        el:"#box",
+        data:{
+            msg:"这是根组件的属性",
+            a:"1"
+        },
+        components:{
+            ihx
+        }
+    })
+</script>
+</html>

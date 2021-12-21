@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button{
+            margin-left:10px;
+        }
+    </style>
+</head>
+<script src="./vue.js"></script>
+<body>
+  <div id="box">
+      <input type="text" v-model="value">
+      <ul><li v-for="(man,index) in select">
+          {{index}}--{{man.name}}--{{man.age}}</li>
+      </ul>
+      <button @click="sortAge(0)">升序</button>
+      <button @click="sortAge(1)">降序</button>
+  </div>  
+</body>
+<script>
+    new Vue({
+        el:"#box",
+        data:{
+            value:"",
+            mans:[
+                {name:'Danny',age:'25'},
+                {name:'Jack',age:'27'},
+                {name:'Mack',age:'24'},
+                {name:'Mary',age:'26'}
+            ] 
+        },
+        methods:{
+            sortAge(n){
+                if(n){
+                    this.mans.sort((a,b)=>{
+                        return b.age-a.age
+                    })
+                }else{
+                    this.mans.sort((a,b)=>{
+                        return a.age-b.age
+                    })
+                }
+            }
+        },
+        computed:{
+            select(){
+                return this.mans.filter(item=>{
+                    return new RegExp(this.value,"i").test(item.name)
+                })
+            }
+        }  
+    })
+</script>
+</html>

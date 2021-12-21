@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+   <div id="box">{{a|ihx}}</div> 
+</body>
+<script>
+    new Vue({
+        el:"#box",
+        data:{
+            a:4
+        },
+        filters:{
+            ihx(n){
+                return '$'+n
+            }
+        }
+    })
+</script>
+<!-- 
+*过滤器的作用不是改变vue数据，只是改变数据在页面中的显示
+*过滤器函数默认接收的参数是管道符左侧的数据，即默认只接收一个数据，如果需要接收多个数据，需要手动传参
+*过滤器函数在插值符号{{}}和属性绑定v-bind中生效
+
+-->
+
+</html>

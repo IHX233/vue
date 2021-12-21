@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="box">
+        
+    </div>
+    <template id="ihx"> 
+        <span>这是模板ihx的数据</span>
+    </template>
+</body>
+<script>
+    let ihx = {
+        template:"#ihx"
+    }
+    new Vue({
+        el:'#box',
+        template:'<ihx></ihx>',//在根组件中如果有template想，则components无效
+                               //如果template项的值是组件，则需要在根组件中先注册该组件
+        components:{
+            ihx
+        },
+        render(createElement){//优先级：render>template>components
+            return createElement('h1',{
+                class:{//类名
+                    foo:true,
+                    bar:false
+                },
+                style:{//样式
+                    color:'red',
+                    fontSize:'14px'
+                },
+                attr:{//其他属性
+                    id:'xxx',
+                    title:'lala'
+                }
+            },['我是h1的数据'])
+        }
+    })
+</script>
+</html>

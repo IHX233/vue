@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="box">
+            <!--子组件传数据给父组件-->
+            <stf v-on:stf="d"></stf>
+            <!--子组件传数据给子组件-->
+            <s1></s1>
+            <s2></s2>
+            <!--子组件访问父组件数据-->
+            <s3></s3>
+            <!--子组件访问父组件的父组件的数据-->
+            <son></son>
+            <ihx></ihx>
+            <ihx></ihx>
+            <ihx></ihx>
+            <name></name>
+            <!--父组件通过属性绑定上传数据给子组件-->
+            <name :a="a"></name>
+    </div>
+    <template id="ihx">
+        <!--所有的模板应该用一个元素包起来，因为只会识别template中第一个元素作为模板-->
+        <div> 
+            <span>{{number}}</span>
+            <button @click="b">按钮</button>
+        </div>
+    </template>
+    <template id="stf">
+        <div> 
+            <button @click="c">子传父</button>
+        </div>
+    </template>
+    <template id="s1">
+        <div> 
+            <button @click="e">子传子</button>
+        </div>
+    </template>
+    <template id="s2">
+        <div> 
+        </div>
+    </template>
+    <template id="s3">
+        <div> 
+            <button @click="f">子组件访问父组件数据</button>
+        </div>
+    </template>
+    <template id="son">
+        <grand-son></grand-son>
+    </template>
+    <template id="gs">
+        <div> 
+            <button @click="gs">孙组件访问父组件数据</button>
+        </div>
+    </template>
+</body>
+<script>
+    let eventBus = new Vue()//事件车
+    /*全局注册*/
+    Vue.component('ihx',{
+        template:"#ihx",
+        data:function(){
+            return{
+                number:10
+            }
+        },
+        methods:{
+            b(){
+                this.number++
+            }
+        }
+
+    })
+    Vue.component('stf',{
+        template:"#stf",
+        data:function(){
+            return{
+                number:1
+            }
+        },
+        methods:{
+            c(){
+                this.$emit('stf',this.number)//触发自定义函数stf并返回数据
+            }
+        }
+
+    })
+    Vue.component('s1',{
+        template:"#s1",
+        data:function(){
+            return{
+                number:2
+            }
+        },
+        methods:{
+            e(){
+                eventBus.$emit('sts',this.number)
+            }
+        }
+
+    })
+    Vue.component('s2',{
+        template:"#s2",
+        created(){
+                eventBus.$on('sts',function(msg){
+                    console.log(`我接收到了兄弟节点传来的数据：${msg}`)
+                })
+            
+        }
+
+    })
+    Vue.component('s3',{
+        template:"#s3",
+        methods:{
+                f(){
+                    console.log(`我访问到了父组件的数据：${this.$parent.a}`)
+                }
+            
+        }
+
+    })
+    
+    /*局部注册*/
+    let GrandSon = {
+        template:"#gs",
+        inject:['b'],
+        methods:{
+                gs(){
+                    console.log(`我访问到了父组件的数据：${this.b}`)
+                }
+            
+        }
+    }
+    let son = {
+        template:"#son",
+        components:{
+            GrandSon
+        }  
+        
+    }
+     let name = {//不能用var创建
+        template:"#ihx",
+        data:function(){
+            return{
+                number:10
+            }
+        },
+        methods:{
+            b(){
+                this.number++
+                console.log(this.a)
+                this.a++//子组件不能直接操作父组件上传的数据
+            }
+        },
+        props:['a']//接收父组件传过来的数据，如果不接受，数据会被保存到$attrs中
+        
+    } 
+    
+    new Vue({
+        el:"#box",
+        data:{
+            a:3
+        },
+        provide:{
+            b:5  
+        },
+        components:{
+            name:name,
+            son
+        },
+        methods:{
+            d(msg){
+                console.log(`我接收到子节点传输的数据：${msg}`)
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="box">
+        <!-- v-for -->
+        <div v-for="item,index of arr">
+            {{item}}--{{index}}
+        </div>
+        <!-- v-if -->
+        <div v-if="b">{{b}}</div>
+        <div v-if="a===1">1</div>
+        <div v-if="a===2">2</div>
+        <div v-if="a===3">3</div>
+        <!-- v-bind -->
+        <div :style=styleObj :class=classArr>bind</div>
+    </div>
+    
+</body>
+<script>
+    new Vue({
+        el:"#box",
+        data:{arr:[1,2,3,4,5],
+            a:2,
+            b:true,
+            styleObj:{
+                color:"yellow",
+                backgroundColor:"pink"
+            },
+            classArr:["a","b","c"]
+        }
+    })
+    
+</script>
+</html>
